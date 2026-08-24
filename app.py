@@ -3,6 +3,22 @@ import streamlit as st
 # to get information using API calls
 import requests
 import pgeocode 
+import sys
+
+def getUV(lat, long):
+
+    uv_url = f"https://currentuvindex.com/api/v1/uvi?latitude={lat}&longitude={long}"
+
+    # request a reponse from the url
+    reponse = requests.get(uv_url)
+
+    reponse.raise_for_status()
+
+    data = reponse.json()
+
+    uv = data["now"]["uvi"]
+
+    return uv
 
 def CelsiusToFert(temp):
     FTemp = (temp * 9/5) + 32
@@ -74,9 +90,22 @@ def EnterZipCode(zipcode):
 
     NewTemp = CelsiusToFert(temp)
 
-    return NewTemp
+    uv = getUV(latitude, longitude)
+
+    return NewTemp, uv
 
 if __name__ == "__main__":
 
-    st.write("Current Temperature:", EnterZipCode("20191"))
+    if  len(sys.argv) < 2:
+        print("Enter zipcode")
+        sys.exit()
+
+    zipcode = sys.argv[1]
+
+    print("ZIP CODE:", zipcode)
+
+    temp, uv = EnterZipCode(zipcode)
+
+    print("Current Temperature:", temp)
+    print("UV:", uv)
 
