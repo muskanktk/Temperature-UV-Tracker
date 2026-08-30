@@ -1,0 +1,26 @@
+{
+  "family": "WeatherMTask",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "0.5 vCPU",
+  "memory": "1 GB",
+  "runtimePlatform": {
+    "cpuArchitecture": "ARM64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "executionRoleArn": "arn:aws:iam::783582650102:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "weatherm",
+      "image": "783582650102.dkr.ecr.us-east-1.amazonaws.com/weatherm:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8501,
+          "hostPort": 8501,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ]
+}
